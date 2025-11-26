@@ -15,21 +15,34 @@ input, button {
 }
 </style>
 </head>
+
 <body>
 <h2>Admin Access</h2>
 <p>Enter password</p>
 <input type="password" id="pass"><br><br>
 <button onclick="login()">Enter</button>
+
 <script>
+// Obfuscated default password
+// Change "1234" to your new default
+const encoded = "MTIzNA=="; // Base64 of "1234"
+
+// Decode function
+function decodePassword(str) {
+    return atob(str);
+}
+
 function login() {
     let pwd = document.getElementById("pass").value;
-    let saved = localStorage.getItem("adminPassword") || "1234";
-    if (pwd === saved) {
+    let saved = localStorage.getItem("adminPassword") || decodePassword(encoded);
+
+    if(pwd === saved){
         window.location.href = "secret.html";
     } else {
         alert("Incorrect password");
     }
 }
 </script>
+
 </body>
 </html>
