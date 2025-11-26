@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Driver App</title>
+<style>
+body {
+    text-align: center;
+    padding-top: 80px;
+    font-family: Arial, sans-serif;
+}
+</style>
+<script>
+let tapCount = 0;
+document.addEventListener("click", () => {
+    tapCount++;
+    if (tapCount >= 5) {
+        window.location.href = "admin.html";
+    }
+    setTimeout(() => { tapCount = 0; }, 3000);
+});
+</script>
+</head>
+<body>
+<a href="https://jlssolutions.com/DriverLogin.php">
+<button style="font-size:22px; padding:15px 30px;">Open Driver App</button>
+</a>
+</body>
+</html>
