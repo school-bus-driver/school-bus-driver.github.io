@@ -8,14 +8,24 @@ body {
     font-family: Arial, sans-serif;
     padding: 40px;
     text-align: center;
+    background: #f5f6fa;
 }
 input, button {
     padding: 12px;
     font-size: 18px;
+    border-radius: 6px;
 }
+input { border: 1px solid #ccc; }
+button {
+    background: #2d89ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 8px;
+}
+button:hover { background: #1b69d6; }
 </style>
 </head>
-
 <body>
 <h2>Admin Access</h2>
 <p>Enter password</p>
@@ -23,26 +33,39 @@ input, button {
 <button onclick="login()">Enter</button>
 
 <script>
-// Obfuscated default password
-// Change "1234" to your new default
-const encoded = "MTIzNA=="; // Base64 of "1234"
+// Storage key for password
+const STORAGE_URL = "https://claude.ai/api/storage";
+const PASSWORD_KEY = "adminPassword";
+const DEFAULT_PASS = "1234"; // Change this default
 
-// Decode function
-function decodePassword(str) {
-    return atob(str);
+async function getStoredPassword() {
+    try {
+        const result = await window.parent?.storage?.get(PASSWORD_KEY);
+        return result ? result.value : null;
+    } catch(e) {
+        // Fallback: try localStorage as secondary backup
+        return localStorage.getItem(PASSWORD_KEY);
+    }
 }
 
-function login() {
+async function login() {
     let pwd = document.getElementById("pass").value;
-    let saved = localStorage.getItem("adminPassword") || decodePassword(encoded);
+    let saved = await getStoredPassword();
+    if (!saved) saved = DEFAULT_PASS;
 
-    if(pwd === saved){
+    if (pwd === saved) {
+        // Store session so secret.html knows we're authenticated
+        sessionStorage.setItem("authenticated", "true");
         window.location.href = "secret.html";
     } else {
         alert("Incorrect password");
     }
 }
-</script>
 
+// Allow Enter key
+document.getElementById("pass").addEventListener("keydown", e => {
+    if (e.key === "Enter") login();
+});
+</script>
 </body>
 </html>
